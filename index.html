@@ -3,61 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JK Movie Home</title>
+    <title>JK Movies - Latest Collection</title>
     <style>
-        body { background: #111; color: #fff; font-family: sans-serif; margin: 0; text-align: center; }
-        .ad-top { background: yellow; color: #000; padding: 10px; font-weight: bold; position: sticky; top: 0; z-index: 100; }
-        .container { padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
-        .movie-card { background: #222; border-radius: 8px; padding: 5px; cursor: pointer; }
-        .movie-card img { width: 100%; border-radius: 5px; height: 200px; object-fit: cover; }
-        .movie-card h3 { font-size: 12px; margin: 5px 0; height: 35px; overflow: hidden; }
-        #loading { margin-top: 50px; font-size: 18px; color: yellow; }
+        /* ডিজাইন: একদম প্রফেশনাল মুভি সাইটের মতো */
+        body { background: #080808; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; }
+        .ad-header { background: #ffcc00; color: #000; padding: 12px; text-align: center; font-weight: bold; position: sticky; top: 0; z-index: 1000; }
+        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; padding: 20px; }
+        .movie-card { background: #1a1a1a; border-radius: 10px; overflow: hidden; transition: 0.3s; cursor: pointer; border: 1px solid #333; }
+        .movie-card:hover { transform: translateY(-5px); border-color: #ffcc00; }
+        .movie-card img { width: 100%; height: 220px; object-fit: cover; }
+        .movie-card h3 { font-size: 13px; padding: 10px; margin: 0; text-align: center; height: 36px; overflow: hidden; color: #eee; }
+        .status { text-align: center; margin-top: 100px; font-size: 20px; color: #ffcc00; }
     </style>
 </head>
 <body>
 
-    <div class="ad-top">আপনার ব্যানার বিজ্ঞাপন এখানে - JK MOVIE</div>
+    <div class="ad-header">
+        আপনার ব্যানার বিজ্ঞাপন এখানে (BANNER AD SPACE)
+    </div>
 
-    <div id="loading">মুভি লোড হচ্ছে... (১০ সেকেন্ড সময় লাগতে পারে)</div>
-    <div class="container" id="movie-list"></div>
+    <div id="status-msg" class="status">মুভি ডাটা সিঙ্ক হচ্ছে, দয়া করে ১০ সেকেন্ড অপেক্ষা করুন...</div>
+    <div class="container" id="movie-grid"></div>
 
     <script>
-        // এটি একটি শক্তিশালী প্রক্সি যা ডেটা টেনে আনবে
-        const url = 'https://prmovies.pizza/';
-        const proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
+        // যে সাইট থেকে ডাটা আসবে
+        const targetSite = 'https://prmovies.pizza/';
+        // ডাটা আনার জন্য প্রক্সি (এটি সিকিউরিটি বাইপাস করবে)
+        const proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(targetSite);
 
-        fetch(proxy)
-            .then(response => response.json())
-            .then(data => {
+        async function syncMovies() {
+            try {
+                const response = await fetch(proxy);
+                const data = await response.json();
                 const html = data.contents;
+                
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
                 
-                // মুভি আইটেমগুলো খুঁজে বের করা
-                const items = doc.querySelectorAll('.ml-item');
-                const list = document.getElementById('movie-list');
-                document.getElementById('loading').style.display = 'none';
+                // মূল সাইটের মুভি আইটেমগুলো খুঁজে বের করা
+                const items = doc.querySelectorAll('.ml-item'); 
+                const grid = document.getElementById('movie-grid');
+                document.getElementById('status-msg').style.display = 'none';
 
                 items.forEach(item => {
                     const title = item.querySelector('h2').innerText;
-                    const img = item.querySelector('img').getAttribute('data-original') || item.querySelector('img').src;
-                    const link = item.querySelector('a').href.replace(window.location.origin, 'https://prmovies.pizza');
+                    // ইমেজ ইউআরএল ঠিক করা
+                    let imgSrc = item.querySelector('img').getAttribute('data-original') || item.querySelector('img').src;
+                    // যদি ইমেজ লিঙ্ক আধা থাকে তবে পূর্ণ করা
+                    if (imgSrc.startsWith('/')) imgSrc = 'https://prmovies.pizza' + imgSrc;
+                    
+                    const originalLink = item.querySelector('a').href.replace(window.location.origin, 'https://prmovies.pizza');
 
                     const card = document.createElement('div');
                     card.className = 'movie-card';
-                    card.innerHTML = `<img src="${img}"><h3>${title}</h3>`;
+                    card.innerHTML = `
+                        <img src="${imgSrc}" alt="${title}">
+                        <h3>${title}</h3>
+                    `;
                     
-                    // ক্লিকে রিডাইরেক্ট লজিক
+                    // ক্লিকে আপনার অ্যাড বা মুভি লিঙ্কে যাওয়ার লজিক
                     card.onclick = () => {
-                        alert("মুভিটি লোড করার আগে একটি অ্যাড দেখানো হবে।");
-                        window.location.href = link;
+                        window.location.href = originalLink;
                     };
-                    list.appendChild(card);
+                    
+                    grid.appendChild(card);
                 });
-            })
-            .catch(err => {
-                document.getElementById('loading').innerText = "সার্ভার স্লো, পেজটি রিফ্রেশ দিন।";
-            });
+
+            } catch (error) {
+                document.getElementById('status-msg').innerText = "সার্ভার রেসপন্স দিচ্ছে না। পেজটি রিফ্রেশ দিন।";
+            }
+        }
+
+        syncMovies();
     </script>
 </body>
 </html>
