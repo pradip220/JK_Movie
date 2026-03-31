@@ -53,7 +53,25 @@
         
         .rating { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #ffcc00; padding: 3px 8px; border-radius: 5px; font-size: 12px; font-weight: bold; z-index: 5; }
 
+        /* ক্লিক অ্যাড ওভারলে */
         #ad-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; }
+        
+        /* অটোমেটিক ৩০ সেকেন্ড পপ-আপ অ্যাড */
+        #auto-popup-ad { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.85); z-index: 10001; 
+            align-items: center; justify-content: center; 
+        }
+        .popup-content { 
+            position: relative; background: #fff; width: 300px; height: 250px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #000;
+        }
+        .close-ad { 
+            position: absolute; top: -15px; right: -15px; width: 30px; height: 30px; 
+            background: #ffcc00; color: #000; border-radius: 50%; border: none; 
+            font-weight: bold; cursor: pointer; font-size: 18px; line-height: 30px; text-align: center;
+        }
+
         .btn-go { padding: 15px 35px; background: var(--accent); color: #000; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; font-size: 18px; }
     </style>
 </head>
@@ -88,32 +106,48 @@
 
     <div id="ad-overlay">
         <h2 style="color: var(--accent);">Processing Request...</h2>
-        <div style="width:300px; height:250px; background:#fff; margin-bottom:20px; border-radius:10px; display:flex; align-items:center; justify-content:center; color:#000;">[ AD SPACE ]</div>
+        <div style="width:300px; height:250px; background:#fff; margin-bottom:20px; border-radius:10px; display:flex; align-items:center; justify-content:center; color:#000;">[ CLICK AD ]</div>
         <p id="timer" style="color:white;"></p>
         <button id="final-btn" class="btn-go" style="display:none;">WATCH NOW</button>
+    </div>
+
+    <div id="auto-popup-ad">
+        <div class="popup-content">
+            <button class="close-ad" onclick="closeAutoAd()">X</button>
+            <div id="popup-ad-placeholder">[ AUTO POP-UP AD ]</div>
+        </div>
     </div>
 
     <script>
         const API_KEY = '0940ae0fad7498e6f74514a9691fb571';
 
+        // --- অটোমেটিক অ্যাড লজিক ---
+        function showAutoAd() {
+            document.getElementById('auto-popup-ad').style.display = 'flex';
+        }
+
+        function closeAutoAd() {
+            document.getElementById('auto-popup-ad').style.display = 'none';
+        }
+
+        // প্রতি ৩০ সেকেন্ড পর পর অ্যাড দেখাবে (৩০০০০ মিলিসেকেন্ড = ৩০ সেকেন্ড)
+        setInterval(showAutoAd, 30000);
+
+        // --- মুভি ডাটা ফেচ লজিক ---
         async function fetchMovies() {
             const bollyGrid = document.getElementById('bollywood-grid');
             const hollyGrid = document.getElementById('hollywood-grid');
-            
             bollyGrid.innerHTML = '<p>Loading Bollywood...</p>';
             hollyGrid.innerHTML = '<p>Loading Hollywood...</p>';
 
             try {
-                // ১. বলিউড
                 const bollyRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc&page=1`);
                 const bollyData = await bollyRes.json();
                 renderMovies(bollyData.results, 'bollywood-grid');
 
-                // ২. হলিউড
                 const hollyRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=en&sort_by=popularity.desc&page=1`);
                 const hollyData = await hollyRes.json();
                 renderMovies(hollyData.results, 'hollywood-grid');
-
             } catch (err) {
                 bollyGrid.innerHTML = "Error loading movies.";
                 hollyGrid.innerHTML = "Error loading movies.";
@@ -123,20 +157,15 @@
         function renderMovies(movies, gridId) {
             const grid = document.getElementById(gridId);
             grid.innerHTML = '';
-
             movies.forEach(movie => {
                 if (!movie.poster_path) return;
-
                 const card = document.createElement('div');
                 card.className = 'movie-card';
                 const rating = movie.vote_average ? `<div class="rating">⭐ ${movie.vote_average.toFixed(1)}</div>` : '';
-
                 card.innerHTML = `
                     ${rating}
                     <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" loading="lazy">
-                    <div class="info">
-                        <h3>${movie.title}</h3>
-                    </div>
+                    <div class="info"><h3>${movie.title}</h3></div>
                 `;
                 card.onclick = () => handleAd(movie.title);
                 grid.appendChild(card);
@@ -147,7 +176,6 @@
             const overlay = document.getElementById('ad-overlay');
             const timerText = document.getElementById('timer');
             const watchBtn = document.getElementById('final-btn');
-            
             overlay.style.display = 'flex';
             let timeLeft = 5; 
             watchBtn.style.display = 'none';
@@ -192,7 +220,6 @@
             document.body.style.overflow = 'auto';
         };
 
-        // সাইট লোড হলে কল হবে
         fetchMovies();
     </script>
 </body>
