@@ -94,13 +94,7 @@
         <div class="container" id="hollywood-grid"></div>
     </div>
 
-    <div id="app-download-banner">
-        <div style="font-size: 13px; font-weight: bold;">Get JK Movie App for better experience!</div>
-        <div style="display:flex; align-items:center;">
-            <a href="আপনার_অ্যাপের_লিঙ্ক" class="btn-download">DOWNLOAD</a>
-            <button onclick="this.parentElement.parentElement.style.display='none'" style="background:none; border:none; font-size:20px; margin-left:10px; cursor:pointer;">×</button>
-        </div>
-    </div>
+    
 
     <script>
         const API_KEY = '0940ae0fad7498e6f74514a9691fb571';
@@ -136,7 +130,20 @@
         function renderMovies(movies, gridId) {
             const grid = document.getElementById(gridId);
             movies.forEach(movie => {
-                if (!movie.poster_path) return;
+                if (!movie.poster_path) re<div id="app-download-popup">
+    <div class="app-info">
+        <div class="app-icon">JK</div>
+        <div class="app-text">
+            <b>JK Movies App</b>
+            <span>Watch movies faster & offline!</span>
+        </div>
+    </div>
+    <div style="display:flex; align-items:center;">
+        <a href="https://drive.google.com/uc?export=download&id=1SHavE6N8LH0W3X7cNphKY6YXID76xq66" class="download-btn">DOWNLOAD</a>
+        <button class="close-app-popup" onclick="closeAppPopup()">×</button>
+    </div>
+</div>
+turn;
                 const card = document.createElement('div');
                 card.className = 'movie-card';
                 const rating = movie.vote_average ? `<div class="rating">⭐ ${movie.vote_average.toFixed(1)}</div>` : '';
