@@ -3,83 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JK Movie Player</title>
+    <title>JK Movie - Home</title>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            background-color: #000;
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: #0b0b0b; color: #fff; }
+        
+        /* আপনার ফিক্সড অ্যাড লেয়ার */
+        .top-ad-bar {
+            position: sticky; top: 0; width: 100%; height: 50px;
+            background: #ffcc00; color: #000; z-index: 1000;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
-        /* নিচের লেয়ারে মুভি সাইট (যদি লোড হয়) */
-        #movie-frame {
-            width: 100%;
-            height: 100%;
-            border: none;
-            z-index: 1;
+        #movie-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px; padding: 15px;
         }
 
-        /* উপরের বিজ্ঞাপনের লেয়ার (Floating Layer) */
-        .my-ad-layer {
-            position: fixed;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9999; /* সবকিছুর উপরে থাকবে */
-            background: rgba(255, 255, 255, 0.9);
-            padding: 5px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
-            text-align: center;
-            min-width: 320px;
-        }
+        .card { background: #1a1a1a; border-radius: 10px; overflow: hidden; cursor: pointer; transition: 0.3s; }
+        .card:hover { transform: scale(1.05); }
+        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card h3 { font-size: 12px; padding: 8px; margin: 0; text-align: center; height: 35px; overflow: hidden; }
 
-        .close-ad {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background: red;
-            color: white;
-            border-radius: 50%;
-            width: 25px;
-            height: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            line-height: 25px;
+        /* অ্যাড লোডিং স্ক্রিন (Overlay) */
+        #ad-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 9999;
+            flex-direction: column; align-items: center; justify-content: center;
         }
+        .ad-box { width: 300px; height: 250px; background: #fff; color: #000; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; }
+        .btn-skip { padding: 10px 20px; background: #ffcc00; color: #000; border: none; cursor: pointer; font-weight: bold; border-radius: 5px; }
 
-        /* যদি Iframe ব্লক থাকে তবে মেসেজ */
-        .error-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            text-align: center;
-            z-index: 0;
-        }
+        .loader { text-align: center; margin-top: 100px; font-size: 18px; color: #ffcc00; }
     </style>
 </head>
 <body>
 
-    <div class="my-ad-layer" id="adLayer">
-        <div class="close-ad" onclick="document.getElementById('adLayer').style.display='none'">X</div>
-        <div style="color: #333; font-size: 12px; margin-bottom: 5px;">SPONSORED AD</div>
-        
-        <div id="ad-content">
-            <p style="color: blue;">আপনার অ্যাড এখানে দেখাবে</p>
-            </div>
+    <div class="top-ad-bar">
+        আপনার ব্যানার বিজ্ঞাপন এখানে চলবে (BANNER AD)
     </div>
 
-    <iframe id="movie-frame" src="https://prmovies.pizza/" allowfullscreen></iframe>
-
-    <div class="error-overlay">
-        <p>মুভিটি সরাসরি লোড না হলে নিচের বাটনে ক্লিক করুন:</p>
-        <a href="https://prmovies.pizza/" style="color: yellow; font-size: 20px;">সরাসরি মুভি দেখুন</a>
+    <div id="ad-overlay">
+        <h2 style="color: #ffcc00;">ভিডিওটি লোড হচ্ছে...</h2>
+        <div class="ad-box">
+            [ বিজ্ঞাপন লোড হচ্ছে ]
+        </div>
+        <p id="timer">দয়া করে ৫ সেকেন্ড অপেক্ষা করুন...</p>
+        <button id="skip-btn" class="btn-skip" style="display:none;">মুভিটি দেখুন (Click to Watch)</button>
     </div>
 
+    <div id="loading-msg" class="loader">মুভি ডাটা সংগ্রহ করা হচ্ছে...</div>
+    <div id="movie-grid"></div>
+
+    <script>
+        const targetUrl = 'https://prmovies.pizza/';
+        const proxy = 'https://api.allorigins.win/raw?url=';
+
+        async function loadMovies() {
+            try {
+                const res = await fetch(proxy + encodeURIComponent(targetUrl));
+                const html = await res.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                const movies = doc.querySelectorAll('.ml-item'); 
+                const grid = document.getElementById('movie-grid');
+                document.getElementById('loading-msg').style.display = 'none';
+
+                movies.forEach(m => {
+                    const title = m.querySelector('h2').innerText;
+                    const img = m.querySelector('img').getAttribute('data-original') || m.querySelector('img').src;
+                    const originalLink = m.querySelector('a').href.replace(window.location.origin, 'https://prmovies.pizza');
+
+                    const div = document.createElement('div');
+                    div.className = 'card';
+                    div.innerHTML = `<img src="${img}"><h3>${title}</h3>`;
+                    
+                    // ক্লিকে অ্যাড দেখানোর লজিক
+                    div.onclick = () => showAd(originalLink);
+                    grid.appendChild(div);
+                });
+            } catch (e) {
+                document.getElementById('loading-msg').innerText = "সার্ভার ব্যস্ত, আবার চেষ্টা করুন।";
+            }
+        }
+
+        function showAd(finalUrl) {
+            const overlay = document.getElementById('ad-overlay');
+            const timerText = document.getElementById('timer');
+            const skipBtn = document.getElementById('skip-btn');
+            
+            overlay.style.display = 'flex';
+            let count = 5;
+
+            const interval = setInterval(() => {
+                count--;
+                timerText.innerText = `দয়া করে ${count} সেকেন্ড অপেক্ষা করুন...`;
+                if (count <= 0) {
+                    clearInterval(interval);
+                    timerText.style.display = 'none';
+                    skipBtn.style.display = 'block';
+                    skipBtn.onclick = () => {
+                        window.location.href = finalUrl;
+                    };
+                }
+            }, 1000);
+        }
+
+        loadMovies();
+    </script>
 </body>
 </html>
