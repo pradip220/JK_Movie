@@ -18,7 +18,7 @@
             --glass: rgba(255, 255, 255, 0.1);
         }
 
-        body { background: var(--bg-color); color: var(--text-main); font-family: 'Segoe UI', sans-serif; margin: 0; }
+        body { background: var(--bg-color); color: var(--text-main); font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
 
         header {
             position: sticky; top: 0; width: 100%; z-index: 1000;
@@ -50,14 +50,9 @@
         .movie-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; cursor: pointer; transition: 0.3s; position: relative; border: 1px solid #333; }
         .movie-card:hover { transform: translateY(-5px); border-color: var(--accent); }
         .movie-card img { width: 100%; height: 230px; object-fit: cover; }
-        .movie-card h3 { font-size: 12px; margin: 0; text-align: center; padding: 10px; height: 35px; overflow: hidden; }
+        .movie-card h3 { font-size: 12px; margin: 0; text-align: center; padding: 10px; height: 35px; overflow: hidden; color: #fff; }
         
         .rating { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #ffcc00; padding: 3px 8px; border-radius: 5px; font-size: 12px; font-weight: bold; z-index: 5; }
-
-        /* পপ-আপ স্টাইল */
-        #ad-overlay, #auto-popup-ad { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.9); }
-        .popup-content { position: relative; background: #fff; width: 300px; height: 250px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #000; }
-        .close-ad { position: absolute; top: -15px; right: -15px; width: 30px; height: 30px; background: #ffcc00; color: #000; border-radius: 50%; border: none; font-weight: bold; cursor: pointer; }
 
         /* অ্যাপ ডাউনলোড ব্যানার স্টাইল */
         #app-download-banner {
@@ -68,6 +63,11 @@
             align-items: center; justify-content: space-between;
         }
         .btn-download { background: #000; color: #ffcc00; border: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 12px; }
+        
+        /* অটো পপ-আপ অ্যাড */
+        #auto-popup-ad { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10001; align-items: center; justify-content: center; }
+        .popup-content { position: relative; background: #fff; width: 300px; height: 250px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #000; }
+        .close-ad { position: absolute; top: -15px; right: -15px; width: 30px; height: 30px; background: #ffcc00; color: #000; border-radius: 50%; border: none; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -94,68 +94,81 @@
         <div class="container" id="hollywood-grid"></div>
     </div>
 
-    
+    <div id="app-download-banner">
+        <div style="display: flex; flex-direction: column;">
+            <span style="font-size: 13px; font-weight: bold;">JK Movies App</span>
+            <span style="font-size: 10px;">Faster & Offline Experience!</span>
+        </div>
+        <div style="display:flex; align-items:center;">
+            <a href="https://drive.google.com/uc?export=download&id=1SHavE6N8LH0W3X7cNphKY6YXID76xq66" class="btn-download">DOWNLOAD</a>
+            <button onclick="document.getElementById('app-download-banner').style.display='none'" style="background:none; border:none; font-size:24px; margin-left:10px; cursor:pointer;">×</button>
+        </div>
+    </div>
+
+    <div id="auto-popup-ad">
+        <div class="popup-content">
+            <button class="close-ad" onclick="closeAutoAd()">X</button>
+            <div>[ Ad Placeholder ]</div>
+        </div>
+    </div>
 
     <script>
         const API_KEY = '0940ae0fad7498e6f74514a9691fb571';
 
-        // স্মার্ট অ্যাপ ডিটেকশন লজিক
+        // স্মার্ট অ্যাপ ডিটেকশন
         function checkAndShowAppBanner() {
-            // চেক করছে ইউজার কি অ্যাপের (WebView) ভেতর আছে কি না
             const isApp = navigator.userAgent.includes("wv") || navigator.userAgent.includes("WebView");
-            
-            // যদি অ্যাপে না থাকে (ব্রাউজারে থাকে), তবেই ডাউনলোড ব্যানার দেখাবে
             if (!isApp) {
                 setTimeout(() => {
-                    document.getElementById('app-download-banner').style.display = 'flex';
-                }, 5000); // ৫ সেকেন্ড পর আসবে
+                    const banner = document.getElementById('app-download-banner');
+                    if(banner) banner.style.display = 'flex';
+                }, 5000);
             }
         }
 
+        // অটো অ্যাড লজিক
+        setInterval(() => {
+            const popup = document.getElementById('auto-popup-ad');
+            if(popup) popup.style.display = 'flex';
+        }, 30000);
+
+        function closeAutoAd() {
+            document.getElementById('auto-popup-ad').style.display = 'none';
+        }
+
+        // মুভি লোড (২০০টি করে)
         async function fetchMovies() {
             const bollyGrid = document.getElementById('bollywood-grid');
             const hollyGrid = document.getElementById('hollywood-grid');
-            for(let i=1; i<=10; i++) {
-                const bollyRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc&page=${i}`);
-                const bollyData = await bollyRes.json();
-                renderMovies(bollyData.results, 'bollywood-grid');
-            }
-            for(let i=1; i<=10; i++) {
-                const hollyRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=en&sort_by=popularity.desc&page=${i}`);
-                const hollyData = await hollyRes.json();
-                renderMovies(hollyData.results, 'hollywood-grid');
-            }
+            
+            try {
+                for(let i=1; i<=10; i++) {
+                    const bollyRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc&page=${i}`);
+                    const bollyData = await bollyRes.json();
+                    renderMovies(bollyData.results, 'bollywood-grid');
+                }
+                for(let i=1; i<=10; i++) {
+                    const hollyRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=en&sort_by=popularity.desc&page=${i}`);
+                    const hollyData = await hollyRes.json();
+                    renderMovies(hollyData.results, 'hollywood-grid');
+                }
+            } catch (err) { console.error("Data Load Error:", err); }
         }
 
         function renderMovies(movies, gridId) {
             const grid = document.getElementById(gridId);
+            if(!grid) return;
             movies.forEach(movie => {
-                if (!movie.poster_path) re<div id="app-download-popup">
-    <div class="app-info">
-        <div class="app-icon">JK</div>
-        <div class="app-text">
-            <b>JK Movies App</b>
-            <span>Watch movies faster & offline!</span>
-        </div>
-    </div>
-    <div style="display:flex; align-items:center;">
-        <a href="https://drive.google.com/uc?export=download&id=1SHavE6N8LH0W3X7cNphKY6YXID76xq66" class="download-btn">DOWNLOAD</a>
-        <button class="close-app-popup" onclick="closeAppPopup()">×</button>
-    </div>
-</div>
-turn;
+                if (!movie.poster_path) return;
                 const card = document.createElement('div');
                 card.className = 'movie-card';
                 const rating = movie.vote_average ? `<div class="rating">⭐ ${movie.vote_average.toFixed(1)}</div>` : '';
                 card.innerHTML = `${rating}<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" loading="lazy"><h3>${movie.title}</h3>`;
-                card.onclick = () => handleAd(movie.title);
+                card.onclick = () => {
+                    window.location.href = "https://prmovies.pizza/?s=" + encodeURIComponent(movie.title);
+                };
                 grid.appendChild(card);
             });
-        }
-
-        function handleAd(movieName) {
-            // আপনার আগের অ্যাড লজিক এখানে থাকবে...
-            window.location.href = "https://prmovies.pizza/?s=" + encodeURIComponent(movieName);
         }
 
         function toggleSearch() {
@@ -174,8 +187,9 @@ turn;
             window.location.href = "https://prmovies.pizza/?s=" + encodeURIComponent(cat);
         }
 
+        // শুরু করা
         fetchMovies();
-        checkAndShowAppBanner(); // এটি কল করা হলো
+        checkAndShowAppBanner();
     </script>
 </body>
 </html>
