@@ -3,56 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JK Movie Portal</title>
+    <title>JK Movie - Live Sync</title>
     <style>
-        body { font-family: sans-serif; background: #000; color: #fff; text-align: center; margin: 0; }
-        .ad-space { background: #ffcc00; color: #000; padding: 15px; font-weight: bold; }
-        .main-btn { 
-            background: red; color: #fff; padding: 20px; 
-            display: inline-block; margin-top: 100px; 
-            text-decoration: none; border-radius: 10px; font-size: 20px; 
+        body { background: #000; color: #fff; margin: 0; font-family: sans-serif; }
+        .header-ad { position: sticky; top: 0; background: #ffcc00; color: #00; padding: 10px; text-align: center; z-index: 1000; font-weight: bold; }
+        #mirror-content { width: 100%; height: 100vh; border: none; }
+        .loading-screen { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+        
+        /* কন্টেন্টের ওপর আপনার ইনভিজিবল বা ভাসমান অ্যাড লেয়ার */
+        .floating-ad {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 100px;
+            background: rgba(255,255,255,0.9);
+            z-index: 9999;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
-        #overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; padding-top:100px; }
     </style>
 </head>
 <body>
 
-    <div class="ad-space">
-        আপনার ব্যানার বিজ্ঞাপন (Banner Ad) এখানে
+    <div class="header-ad">
+        [আপনার ব্যানার বিজ্ঞাপন এখানে] - JK MOVIE
     </div>
 
-    <h1>JK MOVIE পোর্টালে স্বাগতম</h1>
-    <p>সরাসরি মুভি দেখতে নিচের বাটনে ক্লিক করুন</p>
+    <div id="loader" class="loading-screen">
+        <h3>সার্ভারের সাথে কানেক্ট হচ্ছে...</h3>
+        <p>Cloudflare ভেরিফিকেশন বাইপাস করার চেষ্টা করা হচ্ছে। দয়া করে ১০-১৫ সেকেন্ড অপেক্ষা করুন।</p>
+    </div>
 
-    <a href="javascript:void(0)" class="main-btn" onclick="startAd()">সব মুভি এখানে দেখুন (ENTER SITE)</a>
+    <iframe id="mirror-content" src="" style="display:none;"></iframe>
 
-    <div id="overlay">
-        <h2>মুভি সার্ভার লোড হচ্ছে...</h2>
-        <div style="background:#fff; width:300px; height:250px; margin: 20px auto; color:#000; line-height:250px;">
-            আপনার অ্যাড (Square Ad) এখানে
-        </div>
-        <p id="timer">অপেক্ষা করুন ৫ সেকেন্ড...</p>
-        <button id="final-btn" style="display:none; padding:15px; background:green; color:#fff; border:none; cursor:pointer;">মুভি দেখুন</button>
+    <div class="floating-ad">
+        এখানে আপনার পপ-আপ অ্যাড থাকবে
     </div>
 
     <script>
-        function startAd() {
-            document.getElementById('overlay').style.display = 'block';
-            let sec = 5;
-            const timer = setInterval(() => {
-                sec--;
-                document.getElementById('timer').innerText = "অপেক্ষা করুন " + sec + " সেকেন্ড...";
-                if(sec <= 0) {
-                    clearInterval(timer);
-                    document.getElementById('timer').style.display = 'none';
-                    document.getElementById('final-btn').style.display = 'inline-block';
-                }
-            }, 1000);
+        const target = "https://prmovies.pizza/";
+        
+        // এটি একটি শক্তিশালী রিভার্স প্রক্সি যা অনেক সময় ভেরিফিকেশন পার করতে পারে
+        const proxyUrl = "https://thingproxy.freeboard.io/fetch/" + target;
 
-            document.getElementById('final-btn').onclick = function() {
-                window.location.href = "https://prmovies.pizza/";
-            };
-        }
+        const iframe = document.getElementById('mirror-content');
+        const loader = document.getElementById('loader');
+
+        // সোর্স সেট করা
+        // নোট: যদি এটি সরাসরি কাজ না করে তবে Google Translate Proxy ব্যবহার করা হচ্ছে (এটি প্রায় সব সময় কাজ করে)
+        iframe.src = "https://translate.google.com/translate?sl=en&tl=bn&u=" + encodeURIComponent(target);
+
+        iframe.onload = function() {
+            loader.style.display = 'none';
+            iframe.style.display = 'block';
+        };
     </script>
 </body>
 </html>
