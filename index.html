@@ -26,20 +26,35 @@
         .logo { font-size: 22px; font-weight: bold; color: var(--accent); text-decoration: none; }
         .icon-btn { background: var(--glass); border: none; color: white; padding: 8px; border-radius: 50%; cursor: pointer; font-size: 18px; }
 
-        /* Rounded Category Box */
-        .category-box { display: flex; gap: 10px; overflow-x: auto; padding: 10px 20px; scrollbar-width: none; }
-        .cat-item { background: var(--glass); padding: 8px 20px; border-radius: 25px; font-size: 13px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); white-space: nowrap; }
+        /* Search Box */
+        #search-container { display: none; padding: 10px 20px; background: #1a1c22; }
+        #search-input { width: 100%; padding: 10px; border-radius: 5px; border: none; outline: none; }
 
-        /* Movie Grid Design */
+        /* Category Box */
+        .category-box { display: flex; gap: 10px; overflow-x: auto; padding: 10px 20px; scrollbar-width: none; }
+        .cat-item { background: var(--glass); padding: 8px 20px; border-radius: 25px; font-size: 13px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); white-space: nowrap; transition: 0.3s; }
+        .cat-item:hover { background: var(--accent); color: #000; }
+
+        /* Content Area */
         .content-area { padding: 15px 20px; }
         .section-title { font-size: 16px; color: var(--accent); margin: 20px 0 10px; text-transform: uppercase; letter-spacing: 1px; border-left: 3px solid var(--accent); padding-left: 10px; }
         
-        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; margin-bottom: 30px; }
-        
-        .movie-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; cursor: pointer; transition: 0.3s; position: relative; }
-        .movie-card:hover { transform: translateY(-5px); }
-        .movie-card img { width: 100%; height: 160px; object-fit: cover; }
-        .movie-card h3 { font-size: 11px; margin: 0; text-align: center; padding: 8px; height: 30px; overflow: hidden; }
+        /* Responsive Grid: Mobile-1 col, Tablet-3 col, PC-6 col */
+        .container { 
+            display: grid; 
+            grid-template-columns: repeat(6, 1fr); 
+            gap: 15px; 
+            margin-bottom: 30px; 
+        }
+
+        @media (max-width: 1024px) { .container { grid-template-columns: repeat(4, 1fr); } }
+        @media (max-width: 768px) { .container { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 480px) { .container { grid-template-columns: repeat(2, 1fr); } }
+
+        .movie-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; cursor: pointer; transition: 0.3s; position: relative; border: 1px solid #333; }
+        .movie-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .movie-card img { width: 100%; height: 230px; object-fit: cover; }
+        .movie-card h3 { font-size: 12px; margin: 0; text-align: center; padding: 10px; height: 35px; overflow: hidden; }
 
         /* Ad Overlay */
         #ad-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; }
@@ -50,25 +65,27 @@
 
     <header>
         <div class="main-nav">
-            <button class="icon-btn">☰</button>
+            <button class="icon-btn" onclick="toggleMenu()">☰</button>
             <a href="#" class="logo">JK<span>Movies</span></a>
-            <button class="icon-btn">🔍</button>
+            <button class="icon-btn" onclick="toggleSearch()">🔍</button>
         </div>
         
+        <div id="search-container">
+            <input type="text" id="search-input" placeholder="Search for movies..." onkeypress="handleSearch(event)">
+        </div>
+
         <div class="category-box">
-            <div class="cat-item">🎬 Hollywood</div>
-            <div class="cat-item">🇮🇳 Bollywood</div>
-            <div class="cat-item">🍿 Hindi Dubbed</div>
-            <div class="cat-item"> Bengali</div>
+            <div class="cat-item" onclick="categorySearch('Hollywood')">🎬 Hollywood</div>
+            <div class="cat-item" onclick="categorySearch('Bollywood')">🇮🇳 Bollywood</div>
+            <div class="cat-item" onclick="categorySearch('Hindi Dubbed')">🍿 Hindi Dubbed</div>
+            <div class="cat-item" onclick="categorySearch('Bengali')"> Bengali</div>
         </div>
     </header>
 
     <div class="content-area">
-        <div class="section-title">Trending Bollywood</div>
-        <div class="container" id="bollywood-grid"></div>
-
-        <div class="section-title">Latest Hollywood</div>
-        <div class="container" id="hollywood-grid"></div>
+        <div class="section-title">Bollywood & Hollywood Mix</div>
+        <div class="container" id="movie-grid">
+            </div>
     </div>
 
     <div id="ad-overlay">
@@ -82,15 +99,29 @@
         const API_KEY = '0940ae0fad7498e6f74514a9691fb571';
 
         async function fetchMovies() {
-            // Bollywood (Hindi) Data - 12 movies (3-4 rows)
-            const bollyRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc&page=1`);
-            const bollyData = await bollyRes.json();
-            renderMovies(bollyData.results.slice(0, 12), 'bollywood-grid');
+            try {
+                // Fetch Bollywood
+                const bollyRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc`);
+                const bollyData = await bollyRes.json();
 
-            // Hollywood (English) Data - 12 movies (3-4 rows)
-            const hollyRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=en&sort_by=popularity.desc&page=1`);
-            const hollyData = await hollyRes.json();
-            renderMovies(hollyData.results.slice(0, 12), 'hollywood-grid');
+                // Fetch Hollywood
+                const hollyRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=en&sort_by=popularity.desc`);
+                const hollyData = await hollyRes.json();
+
+                const grid = document.getElementById('movie-grid');
+                grid.innerHTML = '';
+
+                // আপনার রিকোয়েস্ট অনুযায়ী সাজানো: প্রথম ৩টি বলি, পরের ৩টি হলি
+                const bollywood3 = bollyData.results.slice(0, 3);
+                const hollywood3 = hollyData.results.slice(0, 3);
+                
+                // দুই লিস্ট মিলিয়ে সাজানো
+                const finalMix = [...bollywood3, ...hollywood3];
+
+                renderMovies(finalMix, 'movie-grid');
+            } catch (error) {
+                console.error("Error fetching movies:", error);
+            }
         }
 
         function renderMovies(movies, gridId) {
@@ -104,6 +135,28 @@
             });
         }
 
+        // Search functions
+        function toggleSearch() {
+            const sc = document.getElementById('search-container');
+            sc.style.display = sc.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function handleSearch(e) {
+            if (e.key === 'Enter') {
+                const query = document.getElementById('search-input').value;
+                window.location.href = "https://prmovies.pizza/?s=" + encodeURIComponent(query);
+            }
+        }
+
+        function categorySearch(cat) {
+            window.location.href = "https://prmovies.pizza/?s=" + encodeURIComponent(cat);
+        }
+
+        function toggleMenu() {
+            alert("Menu system coming soon!");
+        }
+
+        // Ad logic
         function handleAd(movieName) {
             const overlay = document.getElementById('ad-overlay');
             const timerText = document.getElementById('timer');
