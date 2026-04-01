@@ -3,23 +3,36 @@
 <head>
     <meta name="google-site-verification" content="DwbAVtwLPFRxHJmMPqw_TLl0YXC7r9G8Hua_I4qRd80" />
     
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-19B9HEX6E5"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-19B9HEX6E5');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-19B9HEX6E5"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-19B9HEX6E5');
+    </script>
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>JK Movies - Watch Latest Bollywood & Hollywood Movies Online Free</title>
-    <meta name="description" content="Watch the latest Bollywood, Hollywood, Hindi Dubbed, and Bengali movies online for free on JK Movies.">
-    <meta name="keywords" content="JK Movies, Watch Online, Free Movies, Bollywood Movies 2026, Hollywood Hindi Dubbed">
+    <title>Watch Dhurandhar Full Movie Online Free - JK Movies 2026</title>
+    <meta name="description" content="Watch Dhurandhar full movie online for free on JK Movies. High quality streaming of Dhurandhar, Bollywood, Hollywood and Bengali movies.">
+    <meta name="keywords" content="Dhurandhar movie watch online, Dhurandhar full movie download, JK Movies Dhurandhar, Dhurandhar 2026 free movie, Bollywood Dhurandhar online">
+    
+    <meta property="og:title" content="Dhurandhar Full Movie Online - JK Movies">
+    <meta property="og:description" content="Stream Dhurandhar movie in HD only on JK Movies. Free and Fast.">
     <meta name="robots" content="index, follow">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Movie",
+      "name": "Dhurandhar",
+      "url": "https://123moviedownload.github.io/JK_Movie/",
+      "description": "Dhurandhar is a blockbuster movie available on JK Movies for free streaming.",
+      "image": "https://image.tmdb.org/t/p/w500/poster_path_here",
+      "datePublished": "2026"
+    }
+    </script>
 
     <style>
         :root {
@@ -66,7 +79,6 @@
         
         .rating { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #ffcc00; padding: 3px 8px; border-radius: 5px; font-size: 12px; font-weight: bold; z-index: 5; }
 
-        /* অ্যাপ ডাউনলোড ব্যানার স্টাইল */
         #app-download-banner {
             display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 400px; background: #ffcc00; color: #000;
@@ -76,7 +88,6 @@
         }
         .btn-download { background: #000; color: #ffcc00; border: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 12px; }
         
-        /* অটো পপ-আপ অ্যাড */
         #auto-popup-ad { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10001; align-items: center; justify-content: center; }
         .popup-content { position: relative; background: #fff; width: 300px; height: 250px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #000; }
         .close-ad { position: absolute; top: -15px; right: -15px; width: 30px; height: 30px; background: #ffcc00; color: #000; border-radius: 50%; border: none; font-weight: bold; cursor: pointer; }
@@ -90,8 +101,9 @@
             <a href="#" class="logo">JK<span>Movies</span></a>
             <button class="icon-btn" onclick="toggleSearch()">🔍</button>
         </div>
-        <div id="search-container"><input type="text" id="search-input" placeholder="Search..." onkeypress="handleSearchEnter(event)"></div>
+        <div id="search-container"><input type="text" id="search-input" placeholder="Search for Dhurandhar or others..." onkeypress="handleSearchEnter(event)"></div>
         <div class="category-box">
+            <div class="cat-item" onclick="handleCategory('Dhurandhar')">🔥 Dhurandhar Movie</div>
             <div class="cat-item" onclick="handleCategory('Hollywood')">🎬 Hollywood</div>
             <div class="cat-item" onclick="handleCategory('Bollywood')">🇮🇳 Bollywood</div>
             <div class="cat-item" onclick="handleCategory('Hindi Dubbed')">🍿 Hindi Dubbed</div>
@@ -100,6 +112,10 @@
     </header>
 
     <div class="content-area">
+        <div class="section-title">Featured Movie: Dhurandhar</div>
+        <div class="container" id="featured-grid">
+            </div>
+
         <div class="section-title">Bollywood Movies</div>
         <div class="container" id="bollywood-grid"></div>
         <div class="section-title">Hollywood Movies</div>
@@ -127,7 +143,6 @@
     <script>
         const API_KEY = '0940ae0fad7498e6f74514a9691fb571';
 
-        // স্মার্ট অ্যাপ ডিটেকশন
         function checkAndShowAppBanner() {
             const isApp = navigator.userAgent.includes("wv") || navigator.userAgent.includes("WebView");
             if (!isApp) {
@@ -138,7 +153,6 @@
             }
         }
 
-        // অটো অ্যাড লজিক
         setInterval(() => {
             const popup = document.getElementById('auto-popup-ad');
             if(popup) popup.style.display = 'flex';
@@ -148,12 +162,16 @@
             document.getElementById('auto-popup-ad').style.display = 'none';
         }
 
-        // মুভি লোড (২০০টি করে)
         async function fetchMovies() {
             const bollyGrid = document.getElementById('bollywood-grid');
             const hollyGrid = document.getElementById('hollywood-grid');
             
             try {
+                // বিশেষ ধুরন্ধর মুভি সার্চ (TMDB থেকে)
+                const dhurandharRes = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=Dhurandhar`);
+                const dhurandharData = await dhurandharRes.json();
+                renderMovies(dhurandharData.results, 'featured-grid');
+
                 for(let i=1; i<=10; i++) {
                     const bollyRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc&page=${i}`);
                     const bollyData = await bollyRes.json();
@@ -199,7 +217,6 @@
             window.location.href = "https://prmovies.pizza/?s=" + encodeURIComponent(cat);
         }
 
-        // শুরু করা
         fetchMovies();
         checkAndShowAppBanner();
     </script>
