@@ -17,8 +17,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>Dhurandhar 2 Full Movie Download Vegamovies 720p 480p 1080p - JK Movies</title>
-    <meta name="description" content="Watch & Download Dhurandhar 2 Full Movie in HD. Get the best experience better than Vegamovies & Filmyzilla. Latest Bollywood & Hollywood movies on JK Movies.">
-    <meta name="keywords" content="Dhurandhar 2 Full Movie Download Vegamovies, Dhurandhar 2 Filmyzilla, Dhurandhar 2 watch online free, JK Movies, Movie Download 2026">
+    <meta name="description" content="Watch & Download Dhurandhar 2 Full Movie in HD. Get the best experience better than Vegamovies & Filmyzilla.">
+    <meta name="keywords" content="Dhurandhar 2 Full Movie Download Vegamovies, Dhurandhar 2 Filmyzilla, JK Movies">
     <meta name="robots" content="index, follow">
 
     <style>
@@ -66,7 +66,14 @@
         
         .rating { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #ffcc00; padding: 3px 8px; border-radius: 5px; font-size: 12px; font-weight: bold; z-index: 5; }
 
-        .ad-container { text-align: center; margin: 20px 0; min-height: 60px; }
+        /* অ্যাড পপ-আপ স্টাইল */
+        #ad-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 9999; color: white;
+            flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        .ad-box { background: white; padding: 10px; border-radius: 10px; margin-bottom: 20px; }
 
         #app-download-banner {
             display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
@@ -75,10 +82,25 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.4);
             align-items: center; justify-content: space-between;
         }
-        .btn-download { background: #000; color: #ffcc00; border: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 12px; }
     </style>
 </head>
 <body>
+
+    <div id="ad-overlay">
+        <div class="ad-box">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '723bc09c3bb81cc37dcc39806740dfcd',
+                    'format' : 'iframe',
+                    'height' : 250,
+                    'width' : 300,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="https://www.highperformanceformat.com/723bc09c3bb81cc37dcc39806740dfcd/invoke.js"></script>
+        </div>
+        <p id="ad-timer">Redirecting in 5 seconds...</p>
+    </div>
 
     <header>
         <div class="main-nav">
@@ -86,7 +108,7 @@
             <a href="#" class="logo">JK<span>Movies</span></a>
             <button class="icon-btn" onclick="toggleSearch()">🔍</button>
         </div>
-        <div id="search-container"><input type="text" id="search-input" placeholder="Search for Dhurandhar 2, Action..." onkeypress="handleSearchEnter(event)"></div>
+        <div id="search-container"><input type="text" id="search-input" placeholder="Search..." onkeypress="handleSearchEnter(event)"></div>
         <div class="category-box">
             <div class="cat-item" onclick="handleCategory('Dhurandhar 2')">🔥 Dhurandhar 2</div>
             <div class="cat-item" onclick="handleCategory('Hollywood')">🎬 Hollywood</div>
@@ -96,27 +118,11 @@
     </header>
 
     <div class="content-area">
-        <div class="ad-container">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : '723bc09c3bb81cc37dcc39806740dfcd',
-                    'format' : 'iframe',
-                    'height' : 60,
-                    'width' : 468,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="https://www.highperformanceformat.com/723bc09c3bb81cc37dcc39806740dfcd/invoke.js"></script>
-        </div>
-
         <div class="section-title">Exclusive: Dhurandhar 2 HD</div>
         <div class="container" id="featured-grid"></div>
 
         <div class="section-title">Latest Updates</div>
         <div class="container" id="bollywood-grid"></div>
-        
-        <div class="section-title">Hollywood Movies</div>
-        <div class="container" id="hollywood-grid"></div>
     </div>
 
     <div id="app-download-banner">
@@ -125,7 +131,7 @@
             <span style="font-size: 10px;">Safe & Secure Install</span>
         </div>
         <div style="display:flex; align-items:center;">
-            <a href="https://drive.google.com/uc?export=download&id=1SHavE6N8LH0W3X7cNphKY6YXID76xq66" class="btn-download">INSTALL</a>
+            <a href="https://drive.google.com/uc?export=download&id=1SHavE6N8LH0W3X7cNphKY6YXID76xq66" style="background:#000; color:#ffcc00; padding:8px 15px; border-radius:20px; font-weight:bold; text-decoration:none; font-size:12px;">INSTALL</a>
             <button onclick="document.getElementById('app-download-banner').style.display='none'" style="background:none; border:none; font-size:24px; margin-left:10px; cursor:pointer;">×</button>
         </div>
     </div>
@@ -138,34 +144,44 @@
             sc.style.display = (sc.style.display === 'block') ? 'none' : 'block';
         }
 
+        // অ্যাড টাইমার ফাংশন
+        function movieClickWithAd(targetUrl) {
+            const overlay = document.getElementById('ad-overlay');
+            const timerText = document.getElementById('ad-timer');
+            let timeLeft = 5;
+
+            overlay.style.display = 'flex';
+            
+            const timer = setInterval(() => {
+                timeLeft--;
+                timerText.innerText = `Redirecting in ${timeLeft} seconds...`;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    window.location.href = targetUrl;
+                }
+            }, 1000);
+        }
+
         function handleSearchEnter(event) {
             if (event.key === 'Enter') {
                 const query = document.getElementById('search-input').value;
-                if(query) window.location.href = "https://prmovies.pizza/?s=" + encodeURIComponent(query);
+                if(query) movieClickWithAd("https://prmovies.pizza/?s=" + encodeURIComponent(query));
             }
         }
 
         function handleCategory(cat) {
-            window.location.href = "https://prmovies.pizza/?s=" + encodeURIComponent(cat);
+            movieClickWithAd("https://prmovies.pizza/?s=" + encodeURIComponent(cat));
         }
 
         async function fetchMovies() {
             try {
-                // Dhurandhar Featured
                 const fRes = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=Dhurandhar`);
                 const fData = await fRes.json();
                 renderMovies(fData.results.slice(0, 6), 'featured-grid');
 
-                // Bollywood
                 const bRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc`);
                 const bData = await bRes.json();
                 renderMovies(bData.results, 'bollywood-grid');
-
-                // Hollywood
-                const hRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=en&sort_by=popularity.desc`);
-                const hData = await hRes.json();
-                renderMovies(hData.results, 'hollywood-grid');
-
             } catch (err) { console.error(err); }
         }
 
@@ -176,8 +192,8 @@
                 if (!movie.poster_path) return;
                 const card = document.createElement('div');
                 card.className = 'movie-card';
-                card.innerHTML = `<div class="rating">⭐ ${movie.vote_average.toFixed(1)}</div><img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" loading="lazy" alt="${movie.title}"><h3>${movie.title}</h3>`;
-                card.onclick = () => window.location.href = "https://prmovies.pizza/?s=" + encodeURIComponent(movie.title);
+                card.innerHTML = `<div class="rating">⭐ ${movie.vote_average.toFixed(1)}</div><img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" loading="lazy"><h3>${movie.title}</h3>`;
+                card.onclick = () => movieClickWithAd("https://prmovies.pizza/?s=" + encodeURIComponent(movie.title));
                 grid.appendChild(card);
             });
         }
