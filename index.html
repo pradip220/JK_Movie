@@ -61,7 +61,6 @@
         
         .rating { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #ffcc00; padding: 3px 8px; border-radius: 5px; font-size: 12px; font-weight: bold; z-index: 5; }
 
-        /* ৫ সেকেন্ডের অ্যাড ওভারলে */
         #ad-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); z-index: 10001; color: white;
@@ -117,8 +116,8 @@
         <div class="section-title">Exclusive: Dhurandhar 2 HD</div>
         <div class="container" id="featured-grid"></div>
 
-        <div class="section-title">Latest Updates</div>
-        <div class="container" id="bollywood-grid"></div>
+        <div class="section-title">Latest Movies (Bollywood & Hollywood)</div>
+        <div class="container" id="mixed-grid"></div>
     </div>
 
     <div id="app-download-banner">
@@ -135,10 +134,9 @@
     <script>
         const API_KEY = '0940ae0fad7498e6f74514a9691fb571';
 
-        // সাইট থেকে ফিরে আসলে অ্যাড রিমুভ করার ম্যাজিক লজিক
         window.addEventListener('pageshow', function(event) {
             const overlay = document.getElementById('ad-overlay');
-            overlay.style.display = 'none'; // ফিরে আসলেই অ্যাড বন্ধ হবে
+            overlay.style.display = 'none';
         });
 
         function toggleSearch() {
@@ -150,10 +148,8 @@
             const overlay = document.getElementById('ad-overlay');
             const timerText = document.getElementById('ad-timer');
             let timeLeft = 5;
-
             overlay.style.display = 'flex';
             timerText.innerText = `Redirecting in 5 seconds...`;
-            
             const timer = setInterval(() => {
                 timeLeft--;
                 timerText.innerText = `Redirecting in ${timeLeft} seconds...`;
@@ -177,13 +173,17 @@
 
         async function fetchMovies() {
             try {
+                // Dhurandhar Featured
                 const fRes = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=Dhurandhar`);
                 const fData = await fRes.json();
                 renderMovies(fData.results.slice(0, 6), 'featured-grid');
 
-                const bRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc`);
-                const bData = await bRes.json();
-                renderMovies(bData.results, 'bollywood-grid');
+                // ২০০টি মিক্স মুভি লোড করার জন্য লুপ (১০টি পেজ)
+                for (let i = 1; i <= 10; i++) {
+                    const mixRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&sort_by=popularity.desc&page=${i}`);
+                    const mixData = await mixRes.json();
+                    renderMovies(mixData.results, 'mixed-grid');
+                }
             } catch (err) { console.error(err); }
         }
 
