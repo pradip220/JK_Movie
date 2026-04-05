@@ -5,195 +5,202 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title id="dyn-title">JK Movies - Watch & Download Latest HD Movies 2026</title>
-    <meta id="dyn-desc" name="description" content="ডাউনলোড করুন লেটেস্ট বলিউড এবং হলিউড মুভি। প্রতিদিনের ট্রেন্ডিং মুভি আপডেট পান JK Movies-এ।">
-    <meta name="keywords" content="movie download, free movies 2026, vegamovies, hd movies, bollywood, hollywood, trending movies online">
+    <meta id="dyn-desc" name="description" content="ডাউনলোড করুন লেটেস্ট বলিউড এবং হলিউড মুভি। আনলিমিটেড মুভি কালেকশন JK Movies-এ।">
     <meta name="robots" content="index, follow, max-image-preview:large">
-    <link rel="canonical" href="https://your-site-url.com/" />
-
-    <meta name="google-site-verification" content="DwbAVtwLPFRxHJmMPqw_TLl0YXC7r9G8Hua_I4qRd80" />
-    <script src="https://pl29032866.profitablecpmratenetwork.com/11/39/40/113940308a1ea41a0f4fd0ddee402d9a.js"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-19B9HEX6E5"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-19B9HEX6E5');
-    </script>
-
+    
     <style>
         :root { --bg-color: #0c0d10; --card-bg: #1a1c22; --accent: #ffcc00; --text-main: #ffffff; --glass: rgba(255, 255, 255, 0.1); }
-        body { background: var(--bg-color); color: var(--text-main); font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
+        body { background: var(--bg-color); color: var(--text-main); font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; overflow-x: hidden; }
+        
+        /* Responsive Header */
         header { position: sticky; top: 0; width: 100%; z-index: 1000; background: rgba(12, 13, 16, 0.9); backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass); }
-        .main-nav { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; }
-        .logo { font-size: 22px; font-weight: bold; color: var(--accent); text-decoration: none; }
+        .main-nav { display: flex; align-items: center; justify-content: space-between; padding: 10px 5%; }
+        .logo { font-size: 24px; font-weight: bold; color: var(--accent); text-decoration: none; }
         .logo span { color: #fff; }
-        .icon-btn { background: var(--glass); border: none; color: white; padding: 8px; border-radius: 50%; cursor: pointer; font-size: 18px; }
-        #search-container { display: none; padding: 10px 20px; background: #1a1c22; }
-        #search-input { width: 100%; padding: 10px; border-radius: 5px; border: none; background: #333; color: white; }
-        .category-box { display: flex; gap: 10px; overflow-x: auto; padding: 10px 20px; scrollbar-width: none; }
-        .cat-item { background: var(--glass); padding: 8px 20px; border-radius: 25px; font-size: 13px; cursor: pointer; white-space: nowrap; transition: 0.3s; }
+        
+        #search-container { display: none; padding: 10px 5%; background: #1a1c22; }
+        #search-input { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #333; color: white; font-size: 16px; }
+
+        .category-box { display: flex; gap: 10px; overflow-x: auto; padding: 10px 5%; scrollbar-width: none; }
+        .cat-item { background: var(--glass); padding: 8px 22px; border-radius: 25px; font-size: 14px; cursor: pointer; white-space: nowrap; transition: 0.3s; border: 1px solid transparent; }
         .cat-item:hover { background: var(--accent); color: #000; }
-        .content-area { padding: 15px 20px; }
-        .section-title { font-size: 16px; color: var(--accent); margin: 20px 0 10px; text-transform: uppercase; border-left: 3px solid var(--accent); padding-left: 10px; }
-        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-bottom: 30px; }
+
+        /* Responsive Content Area */
+        .content-area { padding: 10px 5%; }
+        .section-title { font-size: 18px; color: var(--accent); margin: 25px 0 15px; text-transform: uppercase; border-left: 4px solid var(--accent); padding-left: 12px; }
+        
+        /* Grid System for All Devices */
+        .container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+            gap: 20px; 
+            margin-bottom: 30px; 
+        }
+
+        @media (max-width: 480px) {
+            .container { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+            .logo { font-size: 20px; }
+        }
+
         .movie-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; cursor: pointer; transition: 0.3s; position: relative; border: 1px solid #333; }
-        .movie-card:hover { transform: translateY(-5px); border-color: var(--accent); }
-        .movie-card img { width: 100%; height: 230px; object-fit: cover; }
-        .movie-card h3 { font-size: 12px; margin: 0; text-align: center; padding: 10px; height: 35px; overflow: hidden; color: #fff; }
-        .rating { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #ffcc00; padding: 3px 8px; border-radius: 5px; font-size: 12px; font-weight: bold; z-index: 5; }
-        #ad-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10001; color: white; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .ad-box { background: white; padding: 10px; border-radius: 10px; margin-bottom: 20px; }
-        #app-download-banner { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: #ffcc00; color: #000; padding: 12px; border-radius: 12px; z-index: 10002; align-items: center; justify-content: space-between; }
+        .movie-card:hover { transform: translateY(-8px); border-color: var(--accent); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .movie-card img { width: 100%; height: 240px; object-fit: cover; }
+        .movie-card h3 { font-size: 13px; margin: 0; text-align: center; padding: 10px; height: 38px; overflow: hidden; color: #eee; }
+        .rating { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #ffcc00; padding: 3px 8px; border-radius: 5px; font-size: 12px; font-weight: bold; }
+
+        #ad-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10001; color: white; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        #app-download-banner { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 450px; background: #ffcc00; color: #000; padding: 15px; border-radius: 12px; z-index: 10002; align-items: center; justify-content: space-between; font-weight: bold; }
+        
+        .loading-text { text-align: center; padding: 20px; color: var(--accent); font-weight: bold; display: none; }
     </style>
 </head>
 <body>
 
     <div id="ad-overlay">
-        <div class="ad-box">
+        <div style="background:white; padding:10px; border-radius:10px; margin-bottom:20px;">
             <script type="text/javascript">
                 atOptions = { 'key' : '723bc09c3bb81cc37dcc39806740dfcd', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
             </script>
             <script type="text/javascript" src="https://www.highperformanceformat.com/723bc09c3bb81cc37dcc39806740dfcd/invoke.js"></script>
         </div>
-        <p id="ad-timer" style="font-weight: bold; font-size: 18px;">Loading Content in 5 seconds...</p>
+        <p id="ad-timer" style="font-size: 18px;">Loading Content...</p>
     </div>
 
     <header>
         <div class="main-nav">
-            <button class="icon-btn">☰</button>
-            <a href="index.html" class="logo">JK<span>Movies</span></a>
-            <button class="icon-btn" onclick="toggleSearch()">🔍</button>
+            <button class="icon-btn" style="background:none; border:none; color:white; font-size:24px;">☰</button>
+            <a href="#" onclick="location.reload()" class="logo">JK<span>Movies</span></a>
+            <button class="icon-btn" onclick="toggleSearch()" style="background:none; border:none; color:white; font-size:20px;">🔍</button>
         </div>
-        <div id="search-container"><input type="text" id="search-input" placeholder="মুভি খুঁজুন..." onkeypress="handleSearchEnter(event)"></div>
+        <div id="search-container"><input type="text" id="search-input" placeholder="মুভির নাম লিখে এন্টার দিন..." onkeypress="handleSearchEnter(event)"></div>
         <div class="category-box">
-            <div class="cat-item" onclick="showCategoryAd('Trending')">🔥 Trending Now</div>
+            <div class="cat-item" onclick="showCategoryAd('Trending')">🔥 Trending</div>
             <div class="cat-item" onclick="showCategoryAd('Hollywood')">🎬 Hollywood</div>
             <div class="cat-item" onclick="showCategoryAd('Bollywood')">🇮🇳 Bollywood</div>
         </div>
     </header>
 
     <div class="content-area">
-        <div class="section-title" id="main-title">🔥 Trending (Hollywood & Bollywood Mix)</div>
-        <div class="container" id="featured-grid"></div>
-
-        <div class="section-title" id="secondary-title">Latest Global Updates</div>
-        <div class="container" id="mixed-grid"></div>
-    </div>
-
-    <div id="app-download-banner">
-        <div style="display: flex; flex-direction: column;">
-            <span style="font-size: 13px; font-weight: bold;">JK Movies App</span>
-            <span style="font-size: 10px;">Safe & Secure Install</span>
-        </div>
-        <div style="display:flex; align-items:center;">
-            <a href="https://drive.google.com/uc?export=download&id=1SHavE6N8LH0W3X7cNphKY6YXID76xq66" style="background:#000; color:#ffcc00; padding:8px 15px; border-radius:20px; font-weight:bold; text-decoration:none; font-size:12px;">INSTALL</a>
-            <button onclick="document.getElementById('app-download-banner').style.display='none'" style="background:none; border:none; font-size:24px; margin-left:10px; cursor:pointer;">×</button>
-        </div>
+        <div class="section-title" id="main-title">🔥 Featured Mix</div>
+        <div class="container" id="movie-grid"></div>
+        <div id="loader" class="loading-text">আরো মুভি লোড হচ্ছে...</div>
     </div>
 
     <script>
         const API_KEY = '0940ae0fad7498e6f74514a9691fb571';
+        let currentPage = 1;
+        let currentType = 'Mixed';
+        let isLoading = false;
+        let searchQuery = '';
 
-        // ব্যাক করলে যাতে অ্যাড না থাকে
-        window.onpageshow = function() { document.getElementById('ad-overlay').style.display = 'none'; };
+        window.onpageshow = () => { document.getElementById('ad-overlay').style.display = 'none'; };
 
         function toggleSearch() {
             const sc = document.getElementById('search-container');
             sc.style.display = (sc.style.display === 'block') ? 'none' : 'block';
-        }
-
-        // ডাইনামিক এসইও ফাংশন
-        function updateDynamicSEO(movieName) {
-            const year = new Date().getFullYear();
-            document.title = `${movieName} Full Movie Download HD Free - JK Movies ${year}`;
-            document.getElementById('dyn-desc').setAttribute('content', `Download ${movieName} and other top trending movies at JK Movies. High quality 720p and 1080p links.`);
+            if(sc.style.display === 'block') document.getElementById('search-input').focus();
         }
 
         function showCategoryAd(type) {
             const overlay = document.getElementById('ad-overlay');
-            const timerText = document.getElementById('ad-timer');
             let timeLeft = 5;
             overlay.style.display = 'flex';
             const timer = setInterval(() => {
                 timeLeft--;
-                timerText.innerText = `Loading Content in ${timeLeft} seconds...`;
+                document.getElementById('ad-timer').innerText = `Loading ${type} in ${timeLeft}s...`;
                 if (timeLeft <= 0) {
                     clearInterval(timer);
                     overlay.style.display = 'none';
-                    loadNewContent(type);
+                    currentPage = 1;
+                    currentType = type;
+                    document.getElementById('movie-grid').innerHTML = '';
+                    loadMovies();
                 }
             }, 1000);
         }
 
-        function movieClickWithAd(targetUrl) {
-            const overlay = document.getElementById('ad-overlay');
-            const timerText = document.getElementById('ad-timer');
-            let timeLeft = 5;
-            overlay.style.display = 'flex';
-            const timer = setInterval(() => {
-                timeLeft--;
-                timerText.innerText = `Redirecting in ${timeLeft} seconds...`;
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    overlay.style.display = 'none';
-                    window.location.href = targetUrl;
-                }
-            }, 1000);
-        }
+        async function loadMovies() {
+            if (isLoading) return;
+            isLoading = true;
+            document.getElementById('loader').style.display = 'block';
 
-        async function fetchMixedTrending(gridId) {
+            let url = '';
+            if (searchQuery) {
+                url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchQuery}&page=${currentPage}`;
+            } else if (currentType === 'Hollywood') {
+                url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=en&page=${currentPage}`;
+            } else if (currentType === 'Bollywood') {
+                url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=hi&page=${currentPage}`;
+            } else {
+                url = `https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}&page=${currentPage}`;
+            }
+
             try {
-                const [hRes, bRes] = await Promise.all([
-                    fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=en&sort_by=popularity.desc`),
-                    fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc`)
-                ]);
-                const hData = await hRes.json();
-                const bData = await bRes.json();
-                let mixed = [];
-                for(let i=0; i<10; i++) {
-                    if(bData.results[i]) mixed.push(bData.results[i]);
-                    if(hData.results[i]) mixed.push(hData.results[i]);
-                }
-                renderMovies(mixed, gridId);
-                if(mixed[0]) updateDynamicSEO(mixed[0].title);
+                const res = await fetch(url);
+                const data = await res.json();
+                renderMovies(data.results);
+                if(data.results.length > 0 && currentPage === 1) updateSEO(data.results[0].title);
+                currentPage++;
             } catch (err) { console.error(err); }
+
+            isLoading = false;
+            document.getElementById('loader').style.display = 'none';
         }
 
-        async function loadNewContent(type) {
-            const grid = document.getElementById('featured-grid');
-            const title = document.getElementById('main-title');
-            grid.innerHTML = 'লোড হচ্ছে...';
-            if(type === 'Trending') { title.innerText = "🔥 Trending Mix"; fetchMixedTrending('featured-grid'); }
-            else if(type === 'Hollywood') { title.innerText = "🎬 Top Hollywood"; fetchAPI(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=en&sort_by=popularity.desc`, 'featured-grid'); }
-            else if(type === 'Bollywood') { title.innerText = "🇮🇳 Top Bollywood"; fetchAPI(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc`, 'featured-grid'); }
-        }
-
-        async function fetchAPI(url, gridId) {
-            const res = await fetch(url);
-            const data = await res.json();
-            renderMovies(data.results.slice(0, 18), gridId);
-            if(data.results[0]) updateDynamicSEO(data.results[0].title);
-        }
-
-        function renderMovies(movies, gridId) {
-            const grid = document.getElementById(gridId);
-            if(!grid) return;
-            grid.innerHTML = '';
+        function renderMovies(movies) {
+            const grid = document.getElementById('movie-grid');
             movies.forEach(movie => {
                 if (!movie.poster_path) return;
                 const card = document.createElement('div');
                 card.className = 'movie-card';
-                card.innerHTML = `<div class="rating">⭐ ${movie.vote_average.toFixed(1)}</div><img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}"><h3>${movie.title}</h3>`;
-                card.onclick = () => movieClickWithAd("https://prmovies.pizza/?s=" + encodeURIComponent(movie.title));
+                card.innerHTML = `
+                    <div class="rating">⭐ ${movie.vote_average.toFixed(1)}</div>
+                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                    <h3>${movie.title}</h3>
+                `;
+                card.onclick = () => movieClickAd(movie.title);
                 grid.appendChild(card);
             });
         }
 
-        window.onload = () => {
-            fetchMixedTrending('featured-grid');
-            fetchAPI(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&sort_by=popularity.desc&page=1`, 'mixed-grid');
-        };
-        setTimeout(() => { document.getElementById('app-download-banner').style.display = 'flex'; }, 5000);
+        function handleSearchEnter(event) {
+            if (event.key === 'Enter') {
+                searchQuery = document.getElementById('search-input').value;
+                if (searchQuery) {
+                    showCategoryAd('Search Results');
+                    document.getElementById('main-title').innerText = `Search: ${searchQuery}`;
+                }
+            }
+        }
+
+        function movieClickAd(title) {
+            const overlay = document.getElementById('ad-overlay');
+            let timeLeft = 5;
+            overlay.style.display = 'flex';
+            const timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('ad-timer').innerText = `Redirecting to ${title} in ${timeLeft}s...`;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    overlay.style.display = 'none';
+                    window.location.href = "https://prmovies.pizza/?s=" + encodeURIComponent(title);
+                }
+            }, 1000);
+        }
+
+        function updateSEO(title) {
+            document.title = `${title} Download Free HD - JK Movies`;
+        }
+
+        // Unlimited Scroll Logic
+        window.addEventListener('scroll', () => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 800) {
+                loadMovies();
+            }
+        });
+
+        // Initial Load
+        loadMovies();
     </script>
 </body>
 </html>
