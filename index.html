@@ -4,25 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>JK Movies - Watch & Download Latest HD Movies 2026</title>
-    <meta name="description" content="Download latest Bollywood, Hollywood, and South Hindi Dubbed movies in 480p, 720p, 1080p. Daily updated trending movies at JK Movies.">
+    <title id="dyn-title">JK Movies - Watch & Download Latest HD Movies 2026</title>
+    <meta id="dyn-desc" name="description" content="Download latest Bollywood, Hollywood, and South Hindi Dubbed movies in 480p, 720p, 1080p. Daily updated trending movies at JK Movies.">
     <meta name="keywords" content="movie download, free movies 2026, vegamovies, hd movies, bollywood, hollywood, trending movies online">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <link rel="canonical" href="https://your-site-url.com/" />
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "JK Movies",
-      "url": "https://your-site-url.com/",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://your-site-url.com/?s={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
-    </script>
 
     <meta name="google-site-verification" content="DwbAVtwLPFRxHJmMPqw_TLl0YXC7r9G8Hua_I4qRd80" />
     <script src="https://pl29032866.profitablecpmratenetwork.com/11/39/40/113940308a1ea41a0f4fd0ddee402d9a.js"></script>
@@ -75,29 +61,29 @@
             </script>
             <script type="text/javascript" src="https://www.highperformanceformat.com/723bc09c3bb81cc37dcc39806740dfcd/invoke.js"></script>
         </div>
-        <p id="ad-timer" style="font-weight: bold; font-size: 18px;">Redirecting in 5 seconds...</p>
+        <p id="ad-timer" style="font-weight: bold; font-size: 18px;">Loading Content in 5 seconds...</p>
     </div>
 
     <header>
         <div class="main-nav">
             <button class="icon-btn">☰</button>
-            <a href="#" class="logo">JK<span>Movies</span></a>
+            <a href="index.html" class="logo">JK<span>Movies</span></a>
             <button class="icon-btn" onclick="toggleSearch()">🔍</button>
         </div>
         <div id="search-container"><input type="text" id="search-input" placeholder="Search movies..." onkeypress="handleSearchEnter(event)"></div>
         <div class="category-box">
-            <div class="cat-item" onclick="handleCategory('Trending Now')">🔥 Trending Now</div>
-            <div class="cat-item" onclick="handleCategory('New Releases')">🍿 New Releases</div>
-            <div class="cat-item" onclick="handleCategory('Hollywood')">🎬 Hollywood</div>
-            <div class="cat-item" onclick="handleCategory('Bollywood')">🇮🇳 Bollywood</div>
+            <div class="cat-item" onclick="showCategoryAd('Trending')">🔥 Trending Now</div>
+            <div class="cat-item" onclick="showCategoryAd('New')">🍿 New Releases</div>
+            <div class="cat-item" onclick="showCategoryAd('Hollywood')">🎬 Hollywood</div>
+            <div class="cat-item" onclick="showCategoryAd('Bollywood')">🇮🇳 Bollywood</div>
         </div>
     </header>
 
     <div class="content-area">
-        <div class="section-title" id="hot-title">🔥 Hot Trending Now</div>
+        <div class="section-title" id="main-title">🔥 Hot Trending Now (Mixed)</div>
         <div class="container" id="featured-grid"></div>
 
-        <div class="section-title">Latest Updates (All Quality)</div>
+        <div class="section-title" id="secondary-title">Latest Updates (All Quality)</div>
         <div class="container" id="mixed-grid"></div>
     </div>
 
@@ -115,13 +101,48 @@
     <script>
         const API_KEY = '0940ae0fad7498e6f74514a9691fb571';
 
-        window.addEventListener('pageshow', function(event) {
-            document.getElementById('ad-overlay').style.display = 'none';
-        });
-
         function toggleSearch() {
             const sc = document.getElementById('search-container');
             sc.style.display = (sc.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // --- জাভাস্ক্রিপ্ট ডাইনামিক এসইও ইঞ্জিন ---
+        function updateDynamicSEO(topMovieName) {
+            const date = new Date().getFullYear();
+            const newTitle = `${topMovieName} Full Movie Download Free HD - JK Movies ${date}`;
+            const newDesc = `Watch and download ${topMovieName} and other latest trending movies in 720p, 1080p. Best high speed download link at JK Movies.`;
+            
+            document.title = newTitle;
+            document.getElementById('dyn-desc').setAttribute('content', newDesc);
+            
+            // Schema Update
+            const schema = {
+              "@context": "https://schema.org",
+              "@type": "Movie",
+              "name": topMovieName,
+              "url": window.location.href,
+              "description": newDesc
+            };
+            const script = document.createElement('script');
+            script.type = "application/ld+json";
+            script.text = JSON.stringify(schema);
+            document.head.appendChild(script);
+        }
+
+        function showCategoryAd(type) {
+            const overlay = document.getElementById('ad-overlay');
+            const timerText = document.getElementById('ad-timer');
+            let timeLeft = 5;
+            overlay.style.display = 'flex';
+            const timer = setInterval(() => {
+                timeLeft--;
+                timerText.innerText = `Loading Content in ${timeLeft} seconds...`;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    overlay.style.display = 'none';
+                    loadNewContent(type);
+                }
+            }, 1000);
         }
 
         function movieClickWithAd(targetUrl) {
@@ -139,6 +160,37 @@
             }, 1000);
         }
 
+        async function loadNewContent(type) {
+            const featuredGrid = document.getElementById('featured-grid');
+            const mixedGrid = document.getElementById('mixed-grid');
+            const mainTitle = document.getElementById('main-title');
+            featuredGrid.innerHTML = ''; 
+            mixedGrid.innerHTML = 'Loading more...';
+            
+            let url = '';
+            if(type === 'Trending') {
+                mainTitle.innerText = "🔥 Hot Trending Now (Mixed)";
+                url = `https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`;
+            } else if(type === 'Hollywood') {
+                mainTitle.innerText = "🎬 Hollywood Hits";
+                url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=en&sort_by=popularity.desc`;
+            } else if(type === 'Bollywood') {
+                mainTitle.innerText = "🇮🇳 Bollywood Blockbusters";
+                url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc`;
+            } else if(type === 'New') {
+                mainTitle.innerText = "🍿 New Releases";
+                url = `https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}`;
+            }
+
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                renderMovies(data.results.slice(0, 18), 'featured-grid');
+                if(data.results[0]) updateDynamicSEO(data.results[0].title); // এসইও আপডেট
+                mixedGrid.innerHTML = ''; 
+            } catch (err) { console.error(err); }
+        }
+
         function handleSearchEnter(event) {
             if (event.key === 'Enter') {
                 const query = document.getElementById('search-input').value;
@@ -146,19 +198,16 @@
             }
         }
 
-        function handleCategory(cat) {
-            movieClickWithAd("https://prmovies.pizza/?s=" + encodeURIComponent(cat));
-        }
-
         async function fetchMovies() {
             try {
-                // 1. Fetch Dynamic Trending (Hot Movies) instead of static search
                 const trendRes = await fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`);
                 const trendData = await trendRes.json();
-                renderMovies(trendData.results.slice(0, 6), 'featured-grid');
+                renderMovies(trendData.results.slice(0, 12), 'featured-grid');
+                
+                // প্রথমবার লোড হওয়ার সময় টপ মুভি দিয়ে এসইও অটো-সেট করা
+                if(trendData.results[0]) updateDynamicSEO(trendData.results[0].title);
 
-                // 2. Load latest mixed movies
-                for (let i = 1; i <= 10; i++) {
+                for (let i = 1; i <= 5; i++) {
                     const mixRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&sort_by=popularity.desc&page=${i}`);
                     const mixData = await mixRes.json();
                     renderMovies(mixData.results, 'mixed-grid');
