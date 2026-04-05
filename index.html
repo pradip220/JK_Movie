@@ -32,7 +32,6 @@
         #search-input { width: 100%; padding: 10px; border-radius: 5px; border: none; background: #333; color: white; }
         .category-box { display: flex; gap: 10px; overflow-x: auto; padding: 10px 20px; scrollbar-width: none; }
         
-        /* Highlight Style */
         .cat-item { background: var(--glass); padding: 8px 20px; border-radius: 25px; font-size: 13px; cursor: pointer; white-space: nowrap; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); }
         .cat-item.active { background: var(--accent); color: #000; font-weight: bold; border-color: #fff; box-shadow: 0 0 10px rgba(255, 204, 0, 0.5); }
         .cat-item:hover { border-color: var(--accent); }
@@ -64,19 +63,20 @@
     <header>
         <div class="main-nav">
             <button class="icon-btn">☰</button>
-            <a href="index.html" class="logo">JK<span>Movies</span></a>
+            <a href="#" onclick="showCategoryAd('Home')" class="logo">JK<span>Movies</span></a>
             <button class="icon-btn" onclick="toggleSearch()">🔍</button>
         </div>
         <div id="search-container"><input type="text" id="search-input" placeholder="Search movies..." onkeypress="handleSearchEnter(event)"></div>
         <div class="category-box">
-            <div id="cat-Trending" class="cat-item active" onclick="showCategoryAd('Trending')">🔥 Trending Now</div>
+            <div id="cat-Home" class="cat-item active" onclick="showCategoryAd('Home')">🏠 Home</div>
+            <div id="cat-Trending" class="cat-item" onclick="showCategoryAd('Trending')">🔥 Trending</div>
             <div id="cat-Hollywood" class="cat-item" onclick="showCategoryAd('Hollywood')">🎬 Hollywood</div>
             <div id="cat-Bollywood" class="cat-item" onclick="showCategoryAd('Bollywood')">🇮🇳 Bollywood</div>
         </div>
     </header>
 
     <div class="content-area">
-        <div class="section-title" id="main-title">🔥 Featured Mix (1:1 Hollywood & Bollywood)</div>
+        <div class="section-title" id="main-title">🆕 New Releases (Hollywood & Bollywood)</div>
         <div class="container" id="movie-grid"></div>
         <div id="infinite-loader" class="loader">Loading More Movies...</div>
     </div>
@@ -85,12 +85,20 @@
         const API_KEY = '0940ae0fad7498e6f74514a9691fb571';
         let page = 1;
         let isLoading = false;
-        let currentMode = 'Trending';
+        let currentMode = 'Home';
         let searchKeyword = '';
+
+        // Back button fix using History API
+        window.onpopstate = function(event) {
+            if (event.state && event.state.mode) {
+                currentMode = event.state.mode;
+                updateHighlight(currentMode);
+                silentResetAndLoad(currentMode);
+            }
+        };
 
         window.onpageshow = () => { 
             document.getElementById('ad-overlay').style.display = 'none'; 
-            // ফিরে আসলে আগের মোড হাইলাইট করা
             updateHighlight(currentMode);
         };
 
@@ -100,21 +108,14 @@
             if(sc.style.display === 'block') document.getElementById('search-input').focus();
         }
 
-        // হাইলাইট আপডেট করার ফাংশন
         function updateHighlight(mode) {
             document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
             const activeEl = document.getElementById('cat-' + mode);
             if (activeEl) activeEl.classList.add('active');
         }
 
-        function updateSEO(name) {
-            const year = new Date().getFullYear();
-            document.title = `${name} Full Movie Download HD - JK Movies ${year}`;
-            document.getElementById('dyn-desc').setAttribute('content', `Download ${name} at JK Movies.`);
-        }
-
         function showCategoryAd(type) {
-            updateHighlight(type); // ক্লিকে সাথে সাথেই হাইলাইট
+            updateHighlight(type);
             const overlay = document.getElementById('ad-overlay');
             let timeLeft = 5;
             overlay.style.display = 'flex';
@@ -133,7 +134,18 @@
             page = 1;
             currentMode = type;
             document.getElementById('movie-grid').innerHTML = '';
-            document.getElementById('main-title').innerText = `🔥 ${type} Movies`;
+            
+            // Push to history for back button
+            history.pushState({ mode: type }, type, "");
+
+            const titles = { 'Home': '🆕 New Releases', 'Trending': '🔥 Trending Now', 'Hollywood': '🎬 Hollywood Hits', 'Bollywood': '🇮🇳 Bollywood Blockbusters' };
+            document.getElementById('main-title').innerText = titles[type] || `Results for ${type}`;
+            loadMovies();
+        }
+
+        function silentResetAndLoad(type) {
+            page = 1;
+            document.getElementById('movie-grid').innerHTML = '';
             loadMovies();
         }
 
@@ -144,10 +156,11 @@
 
             try {
                 let movies = [];
-                if(currentMode === 'Trending') {
+                if(currentMode === 'Home' || currentMode === 'Trending') {
+                    const endpoint = currentMode === 'Home' ? 'now_playing' : 'popular';
                     const [hRes, bRes] = await Promise.all([
-                        fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=en&page=${page}`),
-                        fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=hi&page=${page}`)
+                        fetch(`https://api.themoviedb.org/3/movie/${endpoint}?api_key=${API_KEY}&with_original_language=en&page=${page}`),
+                        fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=hi&sort_by=primary_release_date.desc&page=${page}`)
                     ]);
                     const hData = await hRes.json();
                     const bData = await bRes.json();
@@ -170,10 +183,8 @@
                 }
 
                 renderMovies(movies);
-                if(page === 1 && movies[0]) updateSEO(movies[0].title);
                 page++;
             } catch (err) { console.error(err); }
-
             isLoading = false;
             document.getElementById('infinite-loader').style.display = 'none';
         }
@@ -222,6 +233,8 @@
             }
         });
 
+        // Initialize with Home State
+        history.replaceState({ mode: 'Home' }, 'Home', "");
         loadMovies();
     </script>
 </body>
